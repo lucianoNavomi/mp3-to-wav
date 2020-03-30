@@ -134,24 +134,11 @@ module.exports = {
   ensurePathExists(dirPath) {
 
     if (!dirPath) return
-
-    // if is a Windows serevr
-    if (process.platform === "win32"){
-      let splitDirPath = dirPath.split('\\')
-      if (splitDirPath.length > 1) {
-        splitDirPath.pop()
-        splitDirPath = splitDirPath.join('\\')
-      }
-    } 
-    // Linux and Mac users
-    else {
-      let splitDirPath = dirPath.split('/')
-      if (splitDirPath.length > 1) {
-        splitDirPath.pop()
-        splitDirPath = splitDirPath.join('/')
-      }
+    let splitDirPath = dirPath.split('/')
+    if (splitDirPath.length > 1) {
+      splitDirPath.pop()
+      splitDirPath = splitDirPath.join('/')
     }
-
     if (!fs.pathExistsSync(splitDirPath)) {
       fs.mkdirpSync(splitDirPath)
     }

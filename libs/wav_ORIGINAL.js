@@ -234,8 +234,7 @@ function decode(buffer) {
 
 function encode(channelData, opts) {
   let sampleRate = opts.sampleRate || 16000;
-  // let floatingPoint = !!(opts.float || opts.floatingPoint);
-  let floatingPoint = false;
+  let floatingPoint = !!(opts.float || opts.floatingPoint);
   let bitDepth = floatingPoint ? 32 : ((opts.bitDepth | 0) || 16);
   let channels = channelData.length;
   let samples = channelData[0].length;
