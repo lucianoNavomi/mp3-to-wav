@@ -135,9 +135,11 @@ module.exports = {
 
     if (!dirPath) return
 
+    let splitDirPath = '';
+
     // if is a Windows serevr
     if (process.platform === "win32"){
-      let splitDirPath = dirPath.split('\\')
+      splitDirPath = dirPath.split('\\')
       if (splitDirPath.length > 1) {
         splitDirPath.pop()
         splitDirPath = splitDirPath.join('\\')
@@ -145,7 +147,7 @@ module.exports = {
     } 
     // Linux and Mac users
     else {
-      let splitDirPath = dirPath.split('/')
+      splitDirPath = dirPath.split('/')
       if (splitDirPath.length > 1) {
         splitDirPath.pop()
         splitDirPath = splitDirPath.join('/')
