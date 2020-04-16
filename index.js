@@ -30,6 +30,20 @@ class Mp32Wav {
     }
   }
 
+  // create to be used with Promises and to return the values when done
+  async execAsync() {
+    
+    try {
+      const mp3DecodeRes = await this.decodeMp3(this._input_file_path)
+      const wavPath = await this.saveForWavAsync(mp3DecodeRes.data, this._output_dir, this._output_file_name, mp3DecodeRes.sampleRate, mp3DecodeRes.channels, mp3DecodeRes.float)
+      console.log(`Mp32Wav execAsync convert to wav file successfully, saving on: ${wavPath}`)
+      return wavPath;
+    } catch (err) {
+      console.error(`### Mp32Wav execAsync err: ${err.message}`)
+      throw new Error(`Mp32Wav execAsync err: ${err.message}`)
+    }
+  }
+
   async decodeMp3(file_path) {
 
     try {
@@ -64,6 +78,25 @@ class Mp32Wav {
       return fileFullPath
     } catch (err) {
       throw new Error(`saveForWav err: ${err.message}`)
+    }
+  }
+
+  async saveForWavAsync(buffer, savePath, filename = '', sampleRate, channels, float = true) {
+
+    try {
+      return new Promise(async resolve => {
+        if (!filename) filename = 'temp-' + utils.generateTimestampRandom()
+        const fileFullName = filename + '.wav'
+        const fileFullPath = path.join(savePath, fileFullName)
+
+        const wavData = await wav.encode(buffer, { sampleRate: sampleRate, float: float, channels: channels })
+        utils.saveToPath(fileFullPath, wavData)
+        return resolve(fileFullPath)
+      })
+    } catch (err) {
+      console.error(`### Mp32Wav saveForWavAsync err: ${err.message}`)
+      // throw new Error(`saveForWav err: ${err.message}`)
+      throw new Excetpion(`Mp32Wav saveForWavAsync err: ${err.message}`)
     }
   }
 }
