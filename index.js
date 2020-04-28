@@ -39,17 +39,25 @@ class Mp32Wav {
       console.log(`Mp32Wav execAsync convert to wav file successfully, saving on: ${wavPath}`)
       return wavPath;
     } catch (err) {
-      console.error(`### Mp32Wav execAsync err: ${err.message}`)
-      throw new Error(`Mp32Wav execAsync err: ${err.message}`)
+      console.error(`### Mp32Wav execAsync err: `, err)
+      throw new Error(`Mp32Wav execAsync err`);
     }
   }
 
   async decodeMp3(file_path) {
-
     try {
       let buffer = utils.readFile(file_path)
-      return new Promise(async resolve => {
-        const audioBuffer = await mp3Decode(buffer)
+      return new Promise(async (resolve, reject) => {
+
+        let audioBuffer = null;
+
+        try {
+          audioBuffer = await mp3Decode(buffer)
+        } catch (err2) {
+          console.log(`[mp3-to-wav][index] error: `, err2);
+          return reject(err2)
+        }
+
         const channelData = []
         for (let i = 0; i < audioBuffer.numberOfChannels; i++) {
           channelData[i] = audioBuffer.getChannelData(i)
@@ -62,7 +70,8 @@ class Mp32Wav {
         })
       })
     } catch (err) {
-      throw new Excetpion(`decode mp3 err: ${err.message}`)
+      console.log(`[mp3-to-wav][index] err: `, err);
+      return err;
     }
   }
 

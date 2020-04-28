@@ -21,7 +21,7 @@ module.exports = (buffer) => {
     let asset = AV.Asset.fromBuffer(buffer)
 
     asset.on('error', err => {
-      return reject(err)
+      reject(err)
     })
 
     asset.decodeToBuffer((buffer) => {
@@ -29,8 +29,7 @@ module.exports = (buffer) => {
         channels: asset.format.channelsPerFrame,
         sampleRate: asset.format.sampleRate
       })
-      // resolve(data)
-      return resolve(data)
+      resolve(data)
     })
   })
 }
